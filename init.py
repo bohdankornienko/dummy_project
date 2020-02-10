@@ -1,9 +1,11 @@
 import os
 import sys
 
+from datetime import datetime
+
 
 if 'linux' == sys.platform:
-    print('Registring repository for Linux system...')
+    print('Registering repository for Linux system...')
 
     this_file = os.path.abspath(__file__)
     print('This file absolute path:', this_file)
@@ -16,12 +18,15 @@ if 'linux' == sys.platform:
     with open(bashrc, 'r') as fp:
         content = fp.readlines()
 
-    line = 'export PYTHONPATH={}:$PYTHONPATH\n'.format(this_dir)
+    pythonpath_update = 'export PYTHONPATH={}:$PYTHONPATH\n'.format(this_dir)
 
-    content += [line, '\n']
+    now = datetime.now()
+    date_comment = '# Automatically added by init.py on: {}'.format(now.strftime("%Y-%m-%d %H:%M:%S"))
+
+    content += [date_comment, '\n', pythonpath_update, '\n']
 
     print('Appending .bashrc...')
     with open(bashrc, 'w') as fp:
         fp.writelines(content)
 
-    print('Registration commplete.')
+    print('Registration complete.')
